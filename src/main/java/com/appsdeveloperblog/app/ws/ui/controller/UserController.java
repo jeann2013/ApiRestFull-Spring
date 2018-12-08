@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Build;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.appsdeveloperblog.app.ws.exceptions.UserServiceException;
 import com.appsdeveloperblog.app.ws.ui.model.request.UpdateUserDetailsRequestModel;
 import com.appsdeveloperblog.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
@@ -42,6 +42,12 @@ public class UserController {
 					MediaType.APPLICATION_JSON_VALUE,
 			})
 	public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
+		
+		if(true) throw new UserServiceException("A user serice exception is throw");
+//		String firstName = null;
+//		
+//		int firstNameLength = firstName.length();
+		
 		if(users.containsKey(userId)){
 			return new ResponseEntity<>(users.get(userId), HttpStatus.OK);
 		}else {
