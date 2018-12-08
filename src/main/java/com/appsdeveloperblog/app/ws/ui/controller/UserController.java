@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Build;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.appsdeveloperblog.app.ws.ui.model.request.UpdateUserDetailsRequestModel;
 import com.appsdeveloperblog.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
 
@@ -74,14 +76,34 @@ public class UserController {
 		return new ResponseEntity<UserRest>(returnValue, HttpStatus.OK);
 	}
 	
-	@PutMapping
-	public String updateUser() {
-		return "update user was called";
+	@PutMapping(path="/{userId}",
+			consumes = {
+					MediaType.APPLICATION_XML_VALUE,
+					MediaType.APPLICATION_JSON_VALUE,
+			},
+			produces = {
+					MediaType.APPLICATION_XML_VALUE,
+					MediaType.APPLICATION_JSON_VALUE,
+			}
+			)
+	public UserRest updateUser(@PathVariable String userId, @Valid @RequestBody UpdateUserDetailsRequestModel userDetails) 
+	{
+		UserRest storedUserDetails = users.get(userId);
+		storedUserDetails.setFirstName(userDetails.getFirstname());
+		storedUserDetails.setLastName(userDetails.getLastname());
+		
+		users.put(userId, storedUserDetails);
+		
+		return storedUserDetails;
 	}
 	
-	@DeleteMapping
-	public String deteleUser() {
-		return "delete user was called";
+	@DeleteMapping(path="/{id}")
+	public ResponseEntity<Void> deteleUser(@PathVariable String id) {
+		
+		users.remove(id);
+		
+		return ResponseEntity.noContent().build();
+		
 	}
 	
 	
