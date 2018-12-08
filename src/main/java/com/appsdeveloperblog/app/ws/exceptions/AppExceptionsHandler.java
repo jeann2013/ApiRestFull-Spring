@@ -33,8 +33,8 @@ public class AppExceptionsHandler extends ResponseEntityExceptionHandler {
 				);		
 	}
 	
-	@ExceptionHandler(value = {NullPointerException.class})	
-	public ResponseEntity<Object> handleNullPointerException(NullPointerException ex, WebRequest request){		
+	@ExceptionHandler(value = {NullPointerException.class,UserServiceException.class})	
+	public ResponseEntity<Object> handleNullPointerException(Exception ex, WebRequest request){		
 		String errorMessageDescription = ex.getLocalizedMessage();		
 		if(errorMessageDescription == null) errorMessageDescription = ex.toString();
 		ErrorMessage errorMessage = new ErrorMessage((java.sql.Date) new Date(), errorMessageDescription);
@@ -43,17 +43,6 @@ public class AppExceptionsHandler extends ResponseEntityExceptionHandler {
 				new HttpHeaders(), 
 				HttpStatus.INTERNAL_SERVER_ERROR
 				);		
-	}
+	}	
 	
-	@ExceptionHandler(value = {UserServiceException.class})	
-	public ResponseEntity<Object> handleNullPointerException(UserServiceException ex, WebRequest request){		
-		String errorMessageDescription = ex.getLocalizedMessage();		
-		if(errorMessageDescription == null) errorMessageDescription = ex.toString();
-		ErrorMessage errorMessage = new ErrorMessage((java.sql.Date) new Date(), errorMessageDescription);
-		return new ResponseEntity<>(				
-				errorMessage ,
-				new HttpHeaders(), 
-				HttpStatus.INTERNAL_SERVER_ERROR
-				);		
-	}
 }
